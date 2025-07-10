@@ -3,19 +3,15 @@ package com.hb.cda.thymeleafproject.entity;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
-
 @Entity
 @Table(name="user_table")
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
