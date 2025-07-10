@@ -10,18 +10,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    @Bean
-    SecurityFilterChain securityFilter(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(request -> request
+  @Bean
+  SecurityFilterChain securityFilter(HttpSecurity http) throws Exception {
+    http.authorizeHttpRequests(request -> request
         .anyRequest().permitAll());
-        http.formLogin(login -> login.loginPage("/login"));
-        
-        return http.build();
-    }
+    http.formLogin(login -> login.loginPage("/login").defaultSuccessUrl("/", true));
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    return http.build();
+  }
+
+  @Bean
+  PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 }
 

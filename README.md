@@ -19,7 +19,7 @@ Pour empêcher Spring de démarrer un serveur Docker au lancement de l'applicati
 
 * [x] Créer une petite classe de fixture permettant de remplir la base de données avec des produits et des users
   (pourquoi pas via un CommandLineRunner)
-* [ ] Affichage de la liste des produits paginés avec un bouton/form "Add To Cart"
+* [x] Affichage de la liste des produits paginés avec un bouton/form "Add To Cart"
 * [ ] Créer un CartService qui contiendra le panier permettant :
     * [ ] D'ajouter un produit au panier, si le produit n'est pas déjà dedans
     * [ ] De retirer un produit du panier

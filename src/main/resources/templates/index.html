@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Products</title>
+  <link th:href="@{/styles/main.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<main>
+  <section>
+    <h1>Product page</h1>
+  </section>
+
+  <section id="section-products" th:object="${paginatedProducts}">
+    <h2>Products List</h2>
+
+    <div th:if="${paginatedProducts.getSize <= 0}">
+      <p>No products found</p>
+    </div>
+
+    <div id="paginated-block" th:if="${paginatedProducts.getSize > 0}">
+      <div th:class="results">
+        <div th:class="results-item"
+             th:each="product : ${paginatedProducts.content}"
+             th:object="${product}">
+          <h3>Product: [[*{name}]]</h3>
+          <p>Description: [[*{description}]]</p>
+          <p>Price: [[*{price}]]€</p>
+          <p>Remaining: [[*{stock}]]</p>
+
+          <form th:action="@{/cart/add-product/{id}(id=${product.id})}" method="post">
+            <button type="submit">Add to cart</button>
+          </form>
+        </div>
+      </div>
+
+      <div th:class="pagination">
+        <div th:if="*{totalPages > 0}" class="pagination">
+          <a th:class="${paginatedProducts.isFirst} ? hidden"
+             th:href="@{/(page=${currentPage - 1})}"
+             th:text="Prev"/>
+          <a th:each="pageNbr: ${pageNumbers}" th:href="@{/(page=${pageNbr})}"
+             th:class="${pageNbr == currentPage} ? active" th:text="${pageNbr}"/>
+          <a th:class="${paginatedProducts.isLast()} ? hidden"
+             th:href="@{/(page=${currentPage + 1})}"
+             th:text="Next"/>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+</body>
+</html>
