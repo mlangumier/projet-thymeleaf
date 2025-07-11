@@ -2,6 +2,7 @@ package com.hb.cda.thymeleafproject.controller;
 
 import com.hb.cda.thymeleafproject.entity.*;
 import com.hb.cda.thymeleafproject.repository.*;
+import com.hb.cda.thymeleafproject.service.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
@@ -13,9 +14,11 @@ import java.util.stream.*;
 @Controller
 public class ProductController {
   private final ProductRepository repository;
+  private CartService cartService;
 
-  public ProductController(ProductRepository repository) {
+  public ProductController(ProductRepository repository, CartService cartService) {
     this.repository = repository;
+    this.cartService = cartService;
   }
 
   @GetMapping("/")
@@ -40,5 +43,16 @@ public class ProductController {
     }
 
     return "index";
+  }
+
+  @PostMapping("/cart/add/{id}")
+  public String addProductToCart(@PathVariable("id") String id, Model model) {
+    Product product = repository
+        .findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Product not found: invalid product ID"));
+
+    cartService.addToCart(product);
+
+    return "redirect:/";
   }
 }

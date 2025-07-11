@@ -10,7 +10,7 @@ public enum Role {
     this.name = name;
   }
 
-  public String getLabel() {
+  public String getName() {
     return name;
   }
 }

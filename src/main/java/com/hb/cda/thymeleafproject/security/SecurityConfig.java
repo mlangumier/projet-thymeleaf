@@ -13,6 +13,7 @@ public class SecurityConfig {
   @Bean
   SecurityFilterChain securityFilter(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(request -> request
+        .requestMatchers("/cart/**").authenticated()
         .anyRequest().permitAll());
     http.formLogin(login -> login
         .loginPage("/login").defaultSuccessUrl("/", true));

@@ -20,6 +20,7 @@
 				
 				<div id="paginated-block" th:if="${paginatedProducts.getSize > 0}">
 					<div th:class="results">
+						<!--TODO: if Product.stock < 1 ? class="unavailable" -->
 						<div th:class="results-item"
 								 th:each="product : ${paginatedProducts.content}"
 								 th:object="${product}">
@@ -29,8 +30,9 @@
 							<p>Remaining: [[*{stock}]]</p>
 							
 							<form th:action="@{/cart/add-product/{id}(id=${product.id})}"
-										method="post">
-								<button type="submit">Add to cart</button>
+										method="post"
+										th:disabled="*{stock < 1}">
+								<button type="submit" th:disabled="*{stock < 1}">Add to cart</button>
 							</form>
 						</div>
 					</div>
