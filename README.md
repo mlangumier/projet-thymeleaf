@@ -31,6 +31,7 @@ Pour empêcher Spring de démarrer un serveur Docker au lancement de l'applicati
 
 ### Fonctionnalités bonus
 
+* [ ] Mettre en place un bouton de déconnexion
 * [ ] Gérer la quantité de produit dans le panier (plusieurs manières : soit avec un objet supplémentaire qui a le
   produit et la quantité, soit avec une Map) et donc permettre d'ajouter plusieurs fois le même produit, voir d'ajouter
   plusieurs produits à la fois

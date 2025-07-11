@@ -1,5 +1,6 @@
 package com.hb.cda.thymeleafproject.controller;
 
+import com.hb.cda.thymeleafproject.enums.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,8 +48,8 @@ public class AuthController {
         }
         User user = new User(
             dto.getUsername(),
-            encoder.encode(dto.getPassword()), 
-            "ROLE_USER");
+            encoder.encode(dto.getPassword()),
+            Role.USER);
         repo.save(user);
 
         return "redirect:/login";
@@ -58,4 +59,6 @@ public class AuthController {
     public String showLogin() {
         return "login-form";
     }
+
+    //TODO: logout btn
 }
