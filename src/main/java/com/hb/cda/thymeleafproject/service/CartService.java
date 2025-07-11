@@ -16,30 +16,47 @@ import java.util.*;
 public class CartService {
   private final Set<Product> cartItems = new HashSet<>();
 
-  // Get Cart items
+  /**
+   * Gets the list of items in the cart
+   *
+   * @return a list of items
+   */
   public List<Product> getCartItems() {
     return new ArrayList<>(cartItems);
   }
 
-  // Add product to cart (unique: check if already exists in cart -> HashMap?)
+  /**
+   * Adds a product to the cart
+   *
+   * @param product product we want to add to the cart
+   */
   public void addToCart(Product product) {
+    // TODO: return error if product already exists in Cart
     cartItems.add(product);
   }
 
-  // Remove product from cart
+  /**
+   * Removes a product from the cart
+   *
+   * @param product product we want to remove from the cart
+   */
   public void removeFromCart(Product product) {
     cartItems.removeIf(cartItem -> cartItem.getId().equals(product.getId()));
   }
 
-  // Calculate cart total (nbr of products & total price)
+  /**
+   * Calculates the total sum of the items currently in the cart
+   *
+   * @return The sum of the items in the cart
+   */
   public Double getTotalPrice() {
     return cartItems.stream().mapToDouble(Product::getPrice).sum();
   }
 
-  // Validate (buy) cart: empty cart & take product stocks into account
+  /**
+   * Validates the "buy" action from the user, emptying the cart
+   */
   public void validateCart() {
-    // Check if all items still available (stock > 0)
-
-    //
+    cartItems.clear();
   }
 }

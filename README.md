@@ -22,11 +22,11 @@ Pour empêcher Spring de démarrer un serveur Docker au lancement de l'applicati
 * [x] Affichage de la liste des produits paginés avec un bouton/form "Add To Cart"
 * [ ] Créer un CartService qui contiendra le panier permettant :
     * [ ] D'ajouter un produit au panier, si le produit n'est pas déjà dedans
-    * [ ] De retirer un produit du panier
-    * [ ] De récupérer le prix total du panier
+    * [x] De retirer un produit du panier
+    * [x] De récupérer le prix total du panier
     * [ ] De valider le panier, ce qui impliquera de le vider et de baisser le stock des produits qui sont dedans
-    * [ ] Le panier doit être lié à la session.
-* [ ] Créer une page `/cart` dans laquelle on pourra visualiser les produits dans son panier, le total et le gérer. Les
+    * [x] Le panier doit être lié à la session.
+* [x] Créer une page `/cart` dans laquelle on pourra visualiser les produits dans son panier, le total et le gérer. Les
   différentes requêtes HTTP déclencheront des méthodes du service depuis le contrôleur
 
 ### Fonctionnalités bonus

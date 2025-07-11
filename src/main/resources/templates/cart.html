@@ -6,19 +6,45 @@
 		<link th:href="@{/styles/main.css}" rel="stylesheet"/>
 	</head>
 	<body>
+		<header>
+			<!--	logout button -->
+		</header>
+		
 		<main>
 			<section>
 				<h1>Cart</h1>
 			</section>
 			
 			<section>
+				<a href="/">Back to the store</a>
+			</section>
+			
+			<section id="section-cart">
 				<h2>Items</h2>
 				
+				<div th:if="${cartItems.size <= 0}">
+					<p>No products found</p>
+				</div>
+				
+				<div th:class="cart-list">
+					<div th:each="item : ${cartItems}" th:object="${item}" th:class="cart-list-item">
+						<h3>Product: [[*{name}]]</h3>
+						<p>Description: [[*{description}]]</p>
+						<p>Price: [[*{price}]]€</p>
+						<p>Remaining: [[*{stock}]]</p>
+						
+						<form th:action="@{/cart/remove/{id}(id=${item.id})}"
+									method="post"
+									th:disabled="*{stock < 1}">
+							<button type="submit" th:disabled="*{stock < 1}">Remove from cart</button>
+						</form>
+					</div>
+				</div>
+				
 				<div>
-					<!--	Cart items -->
+					<p>Total: [[${totalPrice}]]€ ([[${cartItems.size}]] item<span th:text="${cartItems.size > 1} ? s" />)</p>
 				</div>
 			</section>
 		</main>
-	
 	</body>
 </html>

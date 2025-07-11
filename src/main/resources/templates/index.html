@@ -6,9 +6,17 @@
 		<link th:href="@{/styles/main.css}" rel="stylesheet"/>
 	</head>
 	<body>
+		<header>
+			<!--	logout button -->
+		</header>
+		
 		<main>
 			<section>
 				<h1>Product page</h1>
+			</section>
+			
+			<section>
+				<a href="/cart">To my cart</a>
 			</section>
 			
 			<section id="section-products" th:object="${paginatedProducts}">
@@ -29,7 +37,7 @@
 							<p>Price: [[*{price}]]€</p>
 							<p>Remaining: [[*{stock}]]</p>
 							
-							<form th:action="@{/cart/add-product/{id}(id=${product.id})}"
+							<form th:action="@{/cart/add/{id}(id=${product.id})}"
 										method="post"
 										th:disabled="*{stock < 1}">
 								<button type="submit" th:disabled="*{stock < 1}">Add to cart</button>
