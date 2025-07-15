@@ -65,12 +65,13 @@ public class CartController {
     return "redirect:/cart";
   }
 
+  //TODO: JavaDoc
   @PostMapping("/validate")
   public String validateCart() {
     try {
-      // Check if all items still available (stock > 0)
+      //TODO: Check if all items still available (stock > 0)
 
-      // Update product.stock on all items
+      //TODO: Update product.stock on all items
 
       cartService.validateCart();
 
