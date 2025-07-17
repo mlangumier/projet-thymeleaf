@@ -26,6 +26,11 @@
 					<p>No products found</p>
 				</div>
 				
+				<div>
+					<p th:if="${error}">[[${error}]]</p>
+					<p th:if="${message}">[[${message}]]</p>
+				</div>
+				
 				<div th:class="cart-list">
 					<div th:each="item : ${cartItems}" th:object="${item}" th:class="cart-list-item">
 						<h3>Product: [[*{name}]]</h3>
@@ -42,7 +47,14 @@
 				</div>
 				
 				<div>
-					<p>Total: [[${totalPrice}]]€ ([[${cartItems.size}]] item<span th:text="${cartItems.size > 1} ? s" />)</p>
+					<p>
+						Total: [[${#numbers.formatCurrency(totalPrice)}]] ([[${cartItems.size}]]
+						item<span th:text="${cartItems.size > 1} ? s"/>)
+					</p>
+					
+					<form th:action="@{/cart/validate}" method="post">
+						<button type="submit" th:disabled="${cartItems.size < 1}">Validate Cart</button>
+					</form>
 				</div>
 			</section>
 		</main>

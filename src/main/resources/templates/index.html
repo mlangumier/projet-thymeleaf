@@ -16,7 +16,7 @@
 			</section>
 			
 			<section>
-				<a href="/cart">To my cart</a>
+				<a href="/cart">My cart</a>
 			</section>
 			
 			<section id="section-products" th:object="${paginatedProducts}">
@@ -24,6 +24,11 @@
 				
 				<div th:if="${paginatedProducts.getSize <= 0}">
 					<p>No products found</p>
+				</div>
+				
+				<div>
+					<p th:if="${error}">[[${error}]]</p>
+					<p th:if="${message}">[[${message}]]</p>
 				</div>
 				
 				<div id="paginated-block" th:if="${paginatedProducts.getSize > 0}">
@@ -37,6 +42,7 @@
 							<p>Price: [[*{price}]]€</p>
 							<p>Remaining: [[*{stock}]]</p>
 							
+							<!--<form th:action="@{/cart/add/{id}(id=${product.id})?page={page}(page=${})&size={size}(size=${})}"-->
 							<form th:action="@{/cart/add/{id}(id=${product.id})}"
 										method="post"
 										th:disabled="*{stock < 1}">

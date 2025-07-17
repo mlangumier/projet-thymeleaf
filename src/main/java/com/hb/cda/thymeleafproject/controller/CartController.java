@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/cart")
@@ -38,24 +39,34 @@ public class CartController {
    * Adds the {@link Product} to the <code>cart</code> after checking if the <code>ID</code> is
    * valid
    *
-   * @param id    Identifier of the <code>product</code> to add to the cart
-   * @param model Data model for the view
+   * @param id                 Identifier of the <code>product</code> to add to the cart
+   * @param redirectAttributes Object that allow us to send data to the next redirect to be
+   *                           displayed in the view
    * @return a redirection to the <code>index</code> view
    */
   @PostMapping("/add/{id}")
-  public String addProductToCart(@PathVariable("id") String id, Model model) {
+  public String addProductToCart(
+      @PathVariable("id") String id,
+      RedirectAttributes redirectAttributes
+  ) {
     Product product = findProductOrThrow(id);
-    cartService.addToCart(product);
-    //TODO: check if redirect or return void?
+
+    boolean success = cartService.addToCart(product);
+
+    if (!success) {
+      redirectAttributes.addFlashAttribute("error", "Product already is the cart");
+    } else {
+      redirectAttributes.addFlashAttribute("message", "'" + product.getName() + "' added to the cart");
+    }
 
     return "redirect:/";
   }
 
   /**
-   * Deletes a {@link Product} from the <code>cart</code>
+   * Deletes a {@link Product} from the <code>cart</code>.
    *
-   * @param id
-   * @return
+   * @param id Identifier of the <code>product</code> we want to remove
+   * @return a redirection to the <code>cart</code> view
    */
   @PostMapping("/remove/{id}")
   public String removeCartItem(@PathVariable("id") String id) {
@@ -65,20 +76,30 @@ public class CartController {
     return "redirect:/cart";
   }
 
-  //TODO: JavaDoc
+  /**
+   * Validates the <code>cart</code> by simulating a "buy" action: verifies that the items are still
+   * available, reduces their stock, then empties the cart.
+   *
+   * @param redirectAttributes Object that allow us to send data to the next redirect to be
+   *                           displayed in the view
+   * @return a redirection to the new empty cart
+   */
   @PostMapping("/validate")
-  public String validateCart() {
-    try {
-      //TODO: Check if all items still available (stock > 0)
+  public String validateCart(RedirectAttributes redirectAttributes) {
+    boolean transactionSuccess = cartService.validateCart();
 
-      //TODO: Update product.stock on all items
-
-      cartService.validateCart();
-
-      return "redirect:/cart";
-    } catch (Exception e) {
-      //TODO: handle errors -> couldn't update items's stock ; items not longer available
-      throw new RuntimeException(e);
+    if (!transactionSuccess) {
+      redirectAttributes.addAttribute(
+          "error",
+          "Failed to validate cart: one or more items are out of stock"
+      );
+      return "cart";
+    } else {
+      redirectAttributes.addFlashAttribute(
+          "message",
+          "Transaction successful! Your cart has been validated"
+      );
+      return "redirect:/";
     }
   }
 

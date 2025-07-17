@@ -20,11 +20,11 @@ Pour empêcher Spring de démarrer un serveur Docker au lancement de l'applicati
 * [x] Créer une petite classe de fixture permettant de remplir la base de données avec des produits et des users
   (pourquoi pas via un CommandLineRunner)
 * [x] Affichage de la liste des produits paginés avec un bouton/form "Add To Cart"
-* [ ] Créer un CartService qui contiendra le panier permettant :
-    * [ ] D'ajouter un produit au panier, si le produit n'est pas déjà dedans
+* [x] Créer un CartService qui contiendra le panier permettant :
+    * [x] D'ajouter un produit au panier, si le produit n'est pas déjà dedans
     * [x] De retirer un produit du panier
     * [x] De récupérer le prix total du panier
-    * [ ] De valider le panier, ce qui impliquera de le vider et de baisser le stock des produits qui sont dedans
+    * [x] De valider le panier, ce qui impliquera de le vider et de baisser le stock des produits qui sont dedans
     * [x] Le panier doit être lié à la session.
 * [x] Créer une page `/cart` dans laquelle on pourra visualiser les produits dans son panier, le total et le gérer. Les
   différentes requêtes HTTP déclencheront des méthodes du service depuis le contrôleur
@@ -32,7 +32,5 @@ Pour empêcher Spring de démarrer un serveur Docker au lancement de l'applicati
 ### Fonctionnalités bonus
 
 * [ ] Mettre en place un bouton de déconnexion
-* [ ] Gérer la quantité de produit dans le panier (plusieurs manières : soit avec un objet supplémentaire qui a le
-  produit et la quantité, soit avec une Map) et donc permettre d'ajouter plusieurs fois le même produit, voir d'ajouter
-  plusieurs produits à la fois
+* [ ] Gérer la quantité de produit dans le panier (plusieurs manières : soit avec un objet supplémentaire qui a le produit et la quantité, soit avec une Map) et donc permettre d'ajouter plusieurs fois le même produit, voir d'ajouter plusieurs produits à la fois
 * [ ] Faire que le panier persiste pour le User connecté (ça demandera de faire pas mal de truc)

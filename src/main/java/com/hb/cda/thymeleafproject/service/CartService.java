@@ -1,10 +1,13 @@
 package com.hb.cda.thymeleafproject.service;
 
 import com.hb.cda.thymeleafproject.entity.*;
+import com.hb.cda.thymeleafproject.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.*;
 import org.springframework.web.context.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service that manages operations regarding the list of {@link Product} in the <code>Cart</code>.
@@ -15,6 +18,11 @@ import java.util.*;
 @SessionScope
 public class CartService {
   private final Set<Product> cartItems = new HashSet<>();
+  private final ProductRepository productRepository;
+
+  public CartService(ProductRepository productRepository) {
+    this.productRepository = productRepository;
+  }
 
   /**
    * Gets the list of items in the cart
@@ -30,9 +38,13 @@ public class CartService {
    *
    * @param product product we want to add to the cart
    */
-  public void addToCart(Product product) {
-    // TODO: return error if product already exists in Cart
-    cartItems.add(product);
+  public boolean addToCart(Product product) {
+    if (cartItems.contains(product)) {
+      return false;
+    } else {
+      cartItems.add(product);
+      return true;
+    }
   }
 
   /**
@@ -55,8 +67,32 @@ public class CartService {
 
   /**
    * Validates the "buy" action from the user, emptying the cart
+   *
+   * @return whether the transaction has been successful or not
    */
-  public void validateCart() {
+  @Transactional
+  public boolean validateCart() {
+    if (cartItems.isEmpty()) return false;
+
+    List<Product> products = cartItems
+        .stream()
+        .map(product -> productRepository
+            .findById(product.getId())
+            .orElseThrow(() -> new IllegalArgumentException("> Product not found: " + product.getId())))
+        .toList();
+
+    for (Product product : products) {
+      if (product.getStock() < 1) {
+        return false;
+      }
+    }
+
+    for (Product product : products) {
+      product.setStock(product.getStock() - 1);
+      productRepository.save(product);
+    }
+
     cartItems.clear();
+    return true;
   }
 }
