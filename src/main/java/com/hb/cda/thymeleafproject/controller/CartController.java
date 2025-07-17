@@ -9,6 +9,9 @@ import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Optional;
+
+
 @Controller
 @RequestMapping("/cart")
 public class CartController {
@@ -47,8 +50,10 @@ public class CartController {
   @PostMapping("/add/{id}")
   public String addProductToCart(
       @PathVariable("id") String id,
+      @RequestParam("page") Optional<Integer> page,
+      @RequestParam("size") Optional<Integer> size,
       RedirectAttributes redirectAttributes
-  ) {
+      ) {
     Product product = findProductOrThrow(id);
 
     boolean success = cartService.addToCart(product);
@@ -56,10 +61,17 @@ public class CartController {
     if (!success) {
       redirectAttributes.addFlashAttribute("error", "Product already is the cart");
     } else {
-      redirectAttributes.addFlashAttribute("message", "'" + product.getName() + "' added to the cart");
+      redirectAttributes.addFlashAttribute(
+          "message",
+          "'" + product.getName() + "' added to the cart"
+      );
     }
 
-    return "redirect:/";
+    System.err.println("> Params: page=" + page + ", size=" + size);
+    int currentPage = page.orElse(1);
+    int currentSize = size.orElse(4);
+
+    return "redirect:/?page=" + currentPage + "&size=" + currentSize;
   }
 
   /**

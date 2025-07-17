@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en"
+			xmlns="http://www.w3.org/1999/xhtml"
+			xmlns:th="https://www.thymeleaf.org"
+			xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 	<head>
 		<meta charset="UTF-8">
 		<title>Products</title>
@@ -7,22 +10,32 @@
 	</head>
 	<body>
 		<header>
-			<!--	logout button -->
+			<div sec:authorize="isAuthenticated()">
+				<p>Welcome, <span sec:authentication="principal.username">visitor</span>!</p>
+				<form th:action="@{/logout}" method="post">
+					<button type="submit">Logout</button>
+				</form>
+			</div>
+			
+			<div sec:authorize="isAnonymous()">
+				<p>Welcome, visitor!</p>
+				<a th:href="@{/login}">Login</a>
+			</div>
 		</header>
 		
 		<main>
-			<section>
+			<section th:class="section-title">
 				<h1>Product page</h1>
 			</section>
 			
 			<section>
-				<a href="/cart">My cart</a>
+				<a th:href="@{/cart}">My cart</a>
 			</section>
 			
-			<section id="section-products" th:object="${paginatedProducts}">
+			<section class="section-products" th:object="${paginatedProducts}">
 				<h2>Products List</h2>
 				
-				<div th:if="${paginatedProducts.getSize <= 0}">
+				<div th:if="${paginatedProducts.getSize() <= 0}">
 					<p>No products found</p>
 				</div>
 				
@@ -31,9 +44,8 @@
 					<p th:if="${message}">[[${message}]]</p>
 				</div>
 				
-				<div id="paginated-block" th:if="${paginatedProducts.getSize > 0}">
+				<div th:class="paginated-block" th:if="${paginatedProducts.getSize() > 0}">
 					<div th:class="results">
-						<!--TODO: if Product.stock < 1 ? class="unavailable" -->
 						<div th:class="results-item"
 								 th:each="product : ${paginatedProducts.content}"
 								 th:object="${product}">
@@ -42,10 +54,11 @@
 							<p>Price: [[*{price}]]€</p>
 							<p>Remaining: [[*{stock}]]</p>
 							
-							<!--<form th:action="@{/cart/add/{id}(id=${product.id})?page={page}(page=${})&size={size}(size=${})}"-->
 							<form th:action="@{/cart/add/{id}(id=${product.id})}"
 										method="post"
 										th:disabled="*{stock < 1}">
+								<input type="hidden" name="page" th:value="${currentPage}"/>
+								<input type="hidden" name="size" th:value="${paginatedProducts.size}"/>
 								<button type="submit" th:disabled="*{stock < 1}">Add to cart</button>
 							</form>
 						</div>

@@ -22,7 +22,7 @@ public class ProductController {
   public String displayIndex(
       Model model,
       @RequestParam(name = "page", defaultValue = "1") int page,
-      @RequestParam(name = "size", defaultValue = "3") int size
+      @RequestParam(name = "size", defaultValue = "4") int size
   ) {
     Page<Product> paginatedProducts = repository.findAll(PageRequest.of(
         page - 1,

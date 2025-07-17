@@ -39,7 +39,7 @@ public class CartService {
    * @param product product we want to add to the cart
    */
   public boolean addToCart(Product product) {
-    if (cartItems.contains(product)) {
+    if (cartItems.contains(product) || product.getStock() < 1) {
       return false;
     } else {
       cartItems.add(product);

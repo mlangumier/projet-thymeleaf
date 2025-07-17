@@ -15,8 +15,15 @@ public class SecurityConfig {
     http.authorizeHttpRequests(request -> request
         .requestMatchers("/cart/**").authenticated()
         .anyRequest().permitAll());
+
     http.formLogin(login -> login
         .loginPage("/login").defaultSuccessUrl("/", true));
+
+    http.logout(logout -> logout
+        .logoutUrl("/logout")
+        .logoutSuccessUrl("/login")
+        .invalidateHttpSession(true)
+        .deleteCookies("JSESSIONID"));
 
     return http.build();
   }
