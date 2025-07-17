@@ -28,20 +28,19 @@
 				<h1>Product page</h1>
 			</section>
 			
-			<section>
-				<a th:href="@{/cart}">My cart</a>
-			</section>
-			
 			<section class="section-products" th:object="${paginatedProducts}">
-				<h2>Products List</h2>
+				<div th:class="list-header">
+					<h2>Products List</h2>
+					<a th:href="@{/cart}">My cart</a>
+				</div>
 				
 				<div th:if="${paginatedProducts.getSize() <= 0}">
 					<p>No products found</p>
 				</div>
 				
-				<div>
-					<p th:if="${error}">[[${error}]]</p>
-					<p th:if="${message}">[[${message}]]</p>
+				<div th:class="alert">
+					<div th:class="error" th:if="${error}">[[${error}]]</div>
+					<div th:class="success" th:if="${message}">[[${message}]]</div>
 				</div>
 				
 				<div th:class="paginated-block" th:if="${paginatedProducts.getSize() > 0}">
@@ -51,9 +50,10 @@
 								 th:object="${product}">
 							<h3>Product: [[*{name}]]</h3>
 							<p>Description: [[*{description}]]</p>
-							<p>Price: [[*{price}]]€</p>
-							<p>Remaining: [[*{stock}]]</p>
-							
+							<div th:class="details">
+								<p>Price: [[*{price}]]€</p>
+								<p>Remaining: [[*{stock}]]</p>
+							</div>
 							<form th:action="@{/cart/add/{id}(id=${product.id})}"
 										method="post"
 										th:disabled="*{stock < 1}">

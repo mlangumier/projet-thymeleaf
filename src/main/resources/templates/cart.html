@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+			xmlns:th="https://www.thymeleaf.org"
+			xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 	<head>
 		<meta charset="UTF-8">
 		<title>Cart</title>
@@ -7,7 +9,17 @@
 	</head>
 	<body>
 		<header>
-			<!--	logout button -->
+			<div sec:authorize="isAuthenticated()">
+				<p>Welcome, <span sec:authentication="principal.username">visitor</span>!</p>
+				<form th:action="@{/logout}" method="post">
+					<button type="submit">Logout</button>
+				</form>
+			</div>
+			
+			<div sec:authorize="isAnonymous()">
+				<p>Welcome, visitor!</p>
+				<a th:href="@{/login}">Login</a>
+			</div>
 		</header>
 		
 		<main>
@@ -19,24 +31,28 @@
 				<a href="/">Back to the store</a>
 			</section>
 			
-			<section id="section-cart">
+			<section th:class="section-products">
 				<h2>Items</h2>
 				
 				<div th:if="${cartItems.size <= 0}">
 					<p>No products found</p>
 				</div>
 				
-				<div>
-					<p th:if="${error}">[[${error}]]</p>
-					<p th:if="${message}">[[${message}]]</p>
+				<div th:class="alert">
+					<div th:class="error" th:if="${error}">[[${error}]]</div>
+					<div th:class="success" th:if="${message}">[[${message}]]</div>
 				</div>
 				
 				<div th:class="cart-list">
-					<div th:each="item : ${cartItems}" th:object="${item}" th:class="cart-list-item">
-						<h3>Product: [[*{name}]]</h3>
-						<p>Description: [[*{description}]]</p>
-						<p>Price: [[*{price}]]€</p>
-						<p>Remaining: [[*{stock}]]</p>
+					<div th:each="item : ${cartItems}" th:object="${item}" th:class="cart-item">
+						<div th:class="info">
+							<h3>Product: [[*{name}]]</h3>
+							<p>Description: [[*{description}]]</p>
+							<div th:class="details">
+								<p>Price: [[*{price}]]€</p>
+								<p>Remaining: [[*{stock}]]</p>
+							</div>
+						</div>
 						
 						<form th:action="@{/cart/remove/{id}(id=${item.id})}"
 									method="post"
@@ -46,12 +62,11 @@
 					</div>
 				</div>
 				
-				<div>
+				<div th:class="cart-recap">
 					<p>
 						Total: [[${#numbers.formatCurrency(totalPrice)}]] ([[${cartItems.size}]]
 						item<span th:text="${cartItems.size > 1} ? s"/>)
 					</p>
-					
 					<form th:action="@{/cart/validate}" method="post">
 						<button type="submit" th:disabled="${cartItems.size < 1}">Validate Cart</button>
 					</form>
